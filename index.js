@@ -69,7 +69,7 @@ async function run() {
 
     app.get("/allapprovedpost", async (req, res) => {
       const result = orderCollection.find({ status:2} );
-      const order = await result.toArray();
+      const post = await result.toArray();
       res.json(order);
     });
     
@@ -83,15 +83,15 @@ async function run() {
     app.delete("/post/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
-      const result = await orderCollection.deleteOne(query);
+      const result = await postCollection.deleteOne(query);
       res.json(result);
     });
 
     app.put("/post/status", async (req, res) => {
-      const order = req.body;
-      const filter = { _id: ObjectId(order.id) };
+      const post = req.body;
+      const filter = { _id: ObjectId(post.id) };
       const updateDoc = { $set: { status: 2 } };
-      const result = await orderCollection.updateOne(filter, updateDoc);
+      const result = await postCollection.updateOne(filter, updateDoc);
       res.json(result);
     });
   } finally {
