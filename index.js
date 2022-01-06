@@ -18,7 +18,7 @@ async function run() {
     await client.connect();
     const database = client.db("blog");
     const usersCollection = database.collection("users");
-    const orderCollection = database.collection("posts");
+    const postCollection = database.collection("posts");
 
     app.post("/user", async (req, res) => {
       const user = req.body;
@@ -56,33 +56,33 @@ async function run() {
 
     app.post("/addpost", async (req, res) => {
       const ride = req.body;
-      const result = await orderCollection.insertOne(ride);
+      const result = await postCollection.insertOne(ride);
       res.json(result);
     });
 
     app.get("/userposts/:email", async (req, res) => {
       const email = req.params.email;
-      const result = orderCollection.find({ userEmail: email });
-      const order = await result.toArray();
-      res.json(order);
+      const result = postCollection.find({ userEmail: email });
+      const post = await result.toArray();
+      res.json(post);
     });
 
     app.get("/allapprovedpost", async (req, res) => {
-      const result = orderCollection.find({ status:2} );
-      const order = await result.toArray();
-      res.json(order);
+      const result = postCollection.find({ status:2} );
+      const post = await result.toArray();
+      res.json(post);
     });
     
     app.get("/allposts", async (req, res) => {
-      const cursor = orderCollection.find({});
-      const order = await cursor.toArray();
-      res.json(order);
+      const cursor = postCollection.find({});
+      const post = await cursor.toArray();
+      res.json(post);
     });
     
     app.delete("/post/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
-      const result = await orderCollection.deleteOne(query);
+      const result = await postCollection.deleteOne(query);
       res.json(result);
     });
 
@@ -90,7 +90,7 @@ async function run() {
       const post = req.body;
       const filter = { _id: ObjectId(post.id) };
       const updateDoc = { $set: { status: 2 } };
-      const result = await orderCollection.updateOne(filter, updateDoc);
+      const result = await postCollection.updateOne(filter, updateDoc);
       res.json(result);
     });
   } finally {
