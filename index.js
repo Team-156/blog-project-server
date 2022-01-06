@@ -79,7 +79,7 @@ async function run() {
       res.json(order);
     });
     
-    // delete my order
+  
     app.delete("/post/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
